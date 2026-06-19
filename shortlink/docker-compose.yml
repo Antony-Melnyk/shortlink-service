@@ -1,5 +1,5 @@
 services:
-
+#
 #  app:
 #
 #    build: .
@@ -16,6 +16,8 @@ services:
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shortlink_db
 #      SPRING_DATASOURCE_USERNAME: postgres
 #      SPRING_DATASOURCE_PASSWORD: pass1234
+#      JAVA_TOOL_OPTIONS: -Duser.timezone=Europe/Kyiv
+#
 
   postgres:
 
