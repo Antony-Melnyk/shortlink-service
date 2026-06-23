@@ -1,19 +1,32 @@
 package com.petproject.shortlink.controller;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.petproject.shortlink.dto.CreateLinkRequest;
 import com.petproject.shortlink.dto.CreateLinkResponse;
-import org.springframework.web.bind.annotation.*; //????
+import com.petproject.shortlink.service.LinkService;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/api/links")
+@RequestMapping("/api/links") // later RedirectController (/api/links)
 public class LinkController {
+
+    private final LinkService linkService;
+
+    public LinkController(LinkService linkService) {
+        this.linkService = linkService;
+    }
 
     @PostMapping
     public CreateLinkResponse createLink(@RequestBody CreateLinkRequest request) {
-        CreateLinkResponse response = new CreateLinkResponse();
-        response.setShortCode("test123");
-        response.setShortUrl("http://localhost:8080/test123");
-        return response;
+        return linkService.createLink(request);
+    }
+
+    @GetMapping("/{shortCode}")
+    public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
+        String originalUrl = linkService.getOriginalUrlAndIncreaseClickCount(shortCode);
+
+        return ResponseEntity.status(302)
+                .header("Location", originalUrl)
+                .build();
     }
 }

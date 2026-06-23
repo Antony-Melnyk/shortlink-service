@@ -37,4 +37,15 @@ public class LinkService {
 
         return response;
     }
+
+    public String getOriginalUrlAndIncreaseClickCount(String shortCode) {
+        LinkEntity link = linkRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new RuntimeException("Link not found"));
+
+        link.setClickCount(link.getClickCount() + 1);
+
+        linkRepository.save(link);
+
+        return link.getOriginalUrl();
+    }
 }
