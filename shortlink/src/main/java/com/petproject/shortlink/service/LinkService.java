@@ -5,6 +5,7 @@ import com.petproject.shortlink.dto.CreateLinkResponse;
 import com.petproject.shortlink.entity.LinkEntity;
 import com.petproject.shortlink.repository.LinkRepository;
 import com.petproject.shortlink.util.ShortCodeGenerator;
+import com.petproject.shortlink.exception.LinkNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public class LinkService {
 
     public String getOriginalUrlAndIncreaseClickCount(String shortCode) {
         LinkEntity link = linkRepository.findByShortCode(shortCode)
-                .orElseThrow(() -> new RuntimeException("Link not found"));
+                .orElseThrow(() -> new LinkNotFoundException(shortCode));
 
         link.setClickCount(link.getClickCount() + 1);
 
