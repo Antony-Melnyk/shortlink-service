@@ -5,6 +5,7 @@ import com.petproject.shortlink.dto.LinkStatsResponse;
 import com.petproject.shortlink.entity.LinkEntity;
 import org.springframework.stereotype.Component;
 
+/// так вот же маппер)
 @Component
 public class LinkMapper {
 
