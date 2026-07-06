@@ -5,6 +5,7 @@ import com.petproject.shortlink.dto.CreateLinkResponse;
 import com.petproject.shortlink.service.LinkService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/links")
@@ -17,7 +18,7 @@ public class LinkController {
     }
 
     @PostMapping
-    public CreateLinkResponse createLink(@RequestBody CreateLinkRequest request) {
+    public CreateLinkResponse createLink(@Valid @RequestBody CreateLinkRequest request) {
         return linkService.createLink(request);
     }
 }
