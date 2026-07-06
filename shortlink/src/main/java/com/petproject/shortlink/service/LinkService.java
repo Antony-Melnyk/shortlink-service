@@ -8,6 +8,7 @@ import com.petproject.shortlink.util.ShortCodeGenerator;
 import com.petproject.shortlink.exception.LinkNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import com.petproject.shortlink.dto.LinkStatsResponse;
 
 import java.time.LocalDateTime;
 
@@ -48,5 +49,18 @@ public class LinkService {
         linkRepository.incrementClickCountByShortCode(shortCode);
 
         return link.getOriginalUrl();
+    }
+
+    public LinkStatsResponse getStats(String shortCode) {
+        LinkEntity link = linkRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new LinkNotFoundException(shortCode));
+
+        LinkStatsResponse response = new LinkStatsResponse();
+        response.setOriginalUrl(link.getOriginalUrl());
+        response.setShortCode(link.getShortCode());
+        response.setClickCount(link.getClickCount());
+        response.setCreatedAt(link.getCreatedAt());
+
+        return response;
     }
 }
