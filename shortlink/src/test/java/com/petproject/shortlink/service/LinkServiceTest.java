@@ -11,6 +11,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.petproject.shortlink.mapper.LinkMapper;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -18,6 +21,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LinkServiceTest {
+
+    @Mock
+    private LinkMapper linkMapper;
 
     @Mock
     private LinkRepository linkRepository;
@@ -34,6 +40,13 @@ class LinkServiceTest {
         request.setUrl("https://youtube.com");
 
         when(shortCodeGenerator.generate()).thenReturn("abc123");
+
+        CreateLinkResponse mappedResponse = new CreateLinkResponse();
+        mappedResponse.setShortCode("abc123");
+        mappedResponse.setShortUrl("http://localhost:8080/abc123");
+
+        when(linkMapper.toCreateLinkResponse(any(LinkEntity.class), eq("http://localhost:8080")))
+                .thenReturn(mappedResponse);
 
         CreateLinkResponse response = linkService.createLink(request);
 

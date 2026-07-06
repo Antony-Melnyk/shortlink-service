@@ -9,6 +9,8 @@ import com.petproject.shortlink.exception.LinkNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import com.petproject.shortlink.dto.LinkStatsResponse;
+import com.petproject.shortlink.mapper.LinkMapper;
+
 
 import java.time.LocalDateTime;
 
@@ -17,10 +19,12 @@ public class LinkService {
 
     private final LinkRepository linkRepository;
     private final ShortCodeGenerator shortCodeGenerator;
+    private final LinkMapper linkMapper;
 
-    public LinkService(LinkRepository linkRepository, ShortCodeGenerator shortCodeGenerator) {
+    public LinkService(LinkRepository linkRepository, ShortCodeGenerator shortCodeGenerator, LinkMapper linkMapper) {
         this.linkRepository = linkRepository;
         this.shortCodeGenerator = shortCodeGenerator;
+        this.linkMapper = linkMapper;
     }
 
     public CreateLinkResponse createLink(CreateLinkRequest request) {
@@ -34,11 +38,12 @@ public class LinkService {
 
         linkRepository.save(link);
 
-        CreateLinkResponse response = new CreateLinkResponse();
-        response.setShortCode(shortCode);
-        response.setShortUrl("http://localhost:8080/" + shortCode);
-
-        return response;
+        return linkMapper.toCreateLinkResponse(link, "http://localhost:8080");
+//        CreateLinkResponse response = new CreateLinkResponse();
+//        response.setShortCode(shortCode);
+//        response.setShortUrl("http://localhost:8080/" + shortCode);
+//
+//        return response;
     }
 
     @Transactional
@@ -55,12 +60,13 @@ public class LinkService {
         LinkEntity link = linkRepository.findByShortCode(shortCode)
                 .orElseThrow(() -> new LinkNotFoundException(shortCode));
 
-        LinkStatsResponse response = new LinkStatsResponse();
-        response.setOriginalUrl(link.getOriginalUrl());
-        response.setShortCode(link.getShortCode());
-        response.setClickCount(link.getClickCount());
-        response.setCreatedAt(link.getCreatedAt());
-
-        return response;
+        return linkMapper.toStatsResponse(link);
+//        LinkStatsResponse response = new LinkStatsResponse();
+//        response.setOriginalUrl(link.getOriginalUrl());
+//        response.setShortCode(link.getShortCode());
+//        response.setClickCount(link.getClickCount());
+//        response.setCreatedAt(link.getCreatedAt());
+//
+//        return response;
     }
 }
