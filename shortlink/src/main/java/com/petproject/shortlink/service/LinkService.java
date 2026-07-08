@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import com.petproject.shortlink.dto.LinkStatsResponse;
 import com.petproject.shortlink.mapper.LinkMapper;
-
-
+import com.petproject.shortlink.config.AppProperties;
 import java.time.LocalDateTime;
 
 @Service
@@ -20,11 +19,17 @@ public class LinkService {
     private final LinkRepository linkRepository;
     private final ShortCodeGenerator shortCodeGenerator;
     private final LinkMapper linkMapper;
+    private final AppProperties appProperties;
 
-    public LinkService(LinkRepository linkRepository, ShortCodeGenerator shortCodeGenerator, LinkMapper linkMapper) {
+    public LinkService(LinkRepository linkRepository,
+                       ShortCodeGenerator shortCodeGenerator,
+                       LinkMapper linkMapper,
+                       AppProperties appProperties
+    ) {
         this.linkRepository = linkRepository;
         this.shortCodeGenerator = shortCodeGenerator;
         this.linkMapper = linkMapper;
+        this.appProperties = appProperties;
     }
 
     public CreateLinkResponse createLink(CreateLinkRequest request) {
@@ -38,12 +43,10 @@ public class LinkService {
 
         linkRepository.save(link);
 
-        return linkMapper.toCreateLinkResponse(link, "http://localhost:8080");
-//        CreateLinkResponse response = new CreateLinkResponse();
-//        response.setShortCode(shortCode);
-//        response.setShortUrl("http://localhost:8080/" + shortCode);
-//
-//        return response;
+        return linkMapper.toCreateLinkResponse(
+                link,
+                appProperties.getBaseUrl()
+        );
     }
 
     @Transactional
@@ -61,12 +64,5 @@ public class LinkService {
                 .orElseThrow(() -> new LinkNotFoundException(shortCode));
 
         return linkMapper.toStatsResponse(link);
-//        LinkStatsResponse response = new LinkStatsResponse();
-//        response.setOriginalUrl(link.getOriginalUrl());
-//        response.setShortCode(link.getShortCode());
-//        response.setClickCount(link.getClickCount());
-//        response.setCreatedAt(link.getCreatedAt());
-//
-//        return response;
     }
 }
