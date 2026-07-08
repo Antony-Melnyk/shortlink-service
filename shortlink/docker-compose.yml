@@ -7,15 +7,22 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shortlink_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: pass1234
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
 
       JAVA_TOOL_OPTIONS: -Duser.timezone=Europe/Kyiv
 
       APP_BASE_URL: http://localhost:8080
-
+  redis:
+    image: redis:7
+    container_name: shortlink-redis
+    ports:
+      - "6379:6379"
   postgres:
     image: postgres:17
 
