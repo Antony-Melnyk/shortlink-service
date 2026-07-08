@@ -1,26 +1,22 @@
 services:
-#
-#  app:
-#
-#    build: .
-#
-#    container_name: shortlink-app
-#
-#    ports:
-#      - "8080:8080"
-#
-#    depends_on:
-#      - postgres
-#
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shortlink_db
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: pass1234
-#      JAVA_TOOL_OPTIONS: -Duser.timezone=Europe/Kyiv
-#
+  app:
+    build: .
+    container_name: shortlink-app
+
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shortlink_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: pass1234
+
+      JAVA_TOOL_OPTIONS: -Duser.timezone=Europe/Kyiv
+
+      APP_BASE_URL: http://localhost:8080
 
   postgres:
-
     image: postgres:17
 
     container_name: shortlink-postgres
@@ -32,9 +28,7 @@ services:
 
     ports:
       - "5432:5432"
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
 volumes:
   postgres_data:

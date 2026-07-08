@@ -23,16 +23,19 @@ public class LinkService {
     private final ShortCodeGenerator shortCodeGenerator;
     private final LinkMapper linkMapper;
     private final AppProperties appProperties;
+    private final LinkCacheService linkCacheService;
 
     public LinkService(LinkRepository linkRepository,
                        ShortCodeGenerator shortCodeGenerator,
                        LinkMapper linkMapper,
-                       AppProperties appProperties
+                       AppProperties appProperties,
+                       LinkCacheService linkCacheService
     ) {
         this.linkRepository = linkRepository;
         this.shortCodeGenerator = shortCodeGenerator;
         this.linkMapper = linkMapper;
         this.appProperties = appProperties;
+        this.linkCacheService = linkCacheService;
     }
 
     public CreateLinkResponse createLink(CreateLinkRequest request) {
@@ -56,19 +59,19 @@ public class LinkService {
         );
     }
 
+
     @Transactional
     public String getOriginalUrlAndIncreaseClickCount(String shortCode) {
 
         log.info("Redirect requested for shortCode={}", shortCode);
 
-        LinkEntity link = linkRepository.findByShortCode(shortCode)
-                .orElseThrow(() -> new LinkNotFoundException(shortCode));
+        String originalUrl = linkCacheService.getOriginalUrlByShortCode(shortCode);
 
         linkRepository.incrementClickCountByShortCode(shortCode);
 
         log.info("Click count incremented for shortCode={}", shortCode);
 
-        return link.getOriginalUrl();
+        return originalUrl;
     }
 
     public LinkStatsResponse getStats(String shortCode) {

@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.petproject.shortlink.mapper.LinkMapper;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import com.petproject.shortlink.config.AppProperties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -21,6 +22,12 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LinkServiceTest {
+
+    @Mock
+    private AppProperties appProperties;
+
+    @Mock
+    private LinkCacheService linkCacheService;
 
     @Mock
     private LinkMapper linkMapper;
@@ -47,6 +54,8 @@ class LinkServiceTest {
 
         when(linkMapper.toCreateLinkResponse(any(LinkEntity.class), eq("http://localhost:8080")))
                 .thenReturn(mappedResponse);
+
+        when(appProperties.getBaseUrl()).thenReturn("http://localhost:8080");
 
         CreateLinkResponse response = linkService.createLink(request);
 
