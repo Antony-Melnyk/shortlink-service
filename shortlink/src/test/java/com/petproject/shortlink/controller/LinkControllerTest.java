@@ -8,12 +8,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.petproject.shortlink.config.CacheConfig;
 import org.springframework.context.annotation.Import;
+import com.petproject.shortlink.config.TestCacheConfig;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(LinkController.class)
-@Import(CacheConfig.class)
+@Import(TestCacheConfig.class)
 class LinkControllerTest {
 
     @Autowired

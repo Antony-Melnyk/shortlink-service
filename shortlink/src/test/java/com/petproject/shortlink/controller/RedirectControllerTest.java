@@ -9,13 +9,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.petproject.shortlink.config.CacheConfig;
 import org.springframework.context.annotation.Import;
+import com.petproject.shortlink.config.TestCacheConfig;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RedirectController.class)
-@Import(CacheConfig.class)
+@Import(TestCacheConfig.class)
 class RedirectControllerTest {
 
     @Autowired
