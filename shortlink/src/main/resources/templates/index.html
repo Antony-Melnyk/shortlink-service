@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shortlink</title>
+</head>
+<body>
+<h1>Shortlink</h1>
+
+<form action="/links" method="post">
+    <label>
+        URL:
+        <input type="text" name="url" placeholder="https://example.com">
+    </label>
+    <button type="submit">Create short link</button>
+</form>
+
+<div th:if="${shortUrl}">
+    <p>Your short link:</p>
+    <a th:href="${shortUrl}" th:text="${shortUrl}"></a>
+</div>
+
+</body>
+</html>

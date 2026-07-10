@@ -1,20 +1,19 @@
-package com.petproject.shortlink.controller;
+package com.petproject.shortlink.controller.api;
 
 import com.petproject.shortlink.dto.CreateLinkRequest;
 import com.petproject.shortlink.dto.CreateLinkResponse;
 import com.petproject.shortlink.service.LinkService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import com.petproject.shortlink.dto.LinkStatsResponse;
 
 @RestController
 @RequestMapping("/api/links")
-public class LinkController {
+public class LinkApiController {
 
     private final LinkService linkService;
 
-    public LinkController(LinkService linkService) {
+    public LinkApiController(LinkService linkService) {
         this.linkService = linkService;
     }
 

@@ -1,4 +1,4 @@
-package com.petproject.shortlink.controller;
+package com.petproject.shortlink.controller.web;
 
 import com.petproject.shortlink.service.LinkService;
 import org.springframework.http.ResponseEntity;
